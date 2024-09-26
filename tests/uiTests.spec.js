@@ -19,7 +19,6 @@ test('Log In Test', async({page}) => {
 //negative login test, login with bad creds and verify error message is received
 test("Bad Login Test", async ({page}) => {
     await page.goto(siteURL)
-    await page.pause()
     await page.locator('[placeholder="Username"]').fill("negative_user")
     await page.locator('[placeholder="Password"]').fill("secret_sauce")
     await page.locator('[name="login-button"]').click()
