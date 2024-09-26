@@ -150,3 +150,11 @@ test("Item Links", async ({page}) => {
     await page.locator('[data-test="logout-sidebar-link"]').click()
     await expect(page.locator('[data-test="login-button"]')).toBeVisible()
 })
+
+//login, add backpack to cart, go to cart, check to see if item is the bike light. expected to fail
+test.fail("Expected Failure Test", async ({page}) => {
+    await page.locator('[name="add-to-cart-sauce-labs-backpack"]').click()
+    await page.locator('[data-test="shopping-cart-link"]').click()
+    await expect(page.url().toBe('https://www.saucedemo.com/cart.html'))
+    await expect(page.locator('data-test="inventory-item-name"').toHaveText("Sauce Labs Bike Light"))
+})
