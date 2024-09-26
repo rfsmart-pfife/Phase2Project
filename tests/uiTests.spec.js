@@ -5,7 +5,6 @@ const siteURL = "https://www.saucedemo.com/"
 //before each test, go to the site and login
 test.beforeEach(async ({page}) => {
     await page.goto(siteURL)
-    await page.pause()
     await page.locator('[placeholder="Username"]').fill("standard_user")
     await page.locator('[placeholder="Password"]').fill("secret_sauce")
     await page.locator('[name="login-button"]').click()
