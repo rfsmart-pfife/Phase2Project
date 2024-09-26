@@ -24,6 +24,7 @@ test("Bad Login Test", async ({page}) => {
     await page.locator('[placeholder="Password"]').fill("secret_sauce")
     await page.locator('[name="login-button"]').click()
     await expect(page.locator('[class="error-message-container error"]')).toBeVisible()
+    await expect(page.locator('[data-test="error"]')).toHaveText("Epic sadface: Username and password do not match any user in this service")
 })
 
 //Login, select the first item, and verify its the expected item
@@ -42,6 +43,7 @@ test("E2E Test", async ({page}) => {
     await page.locator('[data-test="shopping-cart-link"]').click()
     await expect(page.url()).toBe("https://www.saucedemo.com/cart.html")
     await expect(page.locator('[id="checkout"]')).toBeVisible()
+    await expect( page.locator('[data-test="item-4-title-link"]')).toBeVisible()
     await page.locator('[id="checkout"]').click()
     await expect(page.url()).toBe("https://www.saucedemo.com/checkout-step-one.html")
     await expect(page.locator('[data-test="title"]')).toHaveText("Checkout: Your Information")
@@ -83,12 +85,21 @@ test("Add And Remove Cart", async ({page}) => {
     await expect(page.locator('[data-test="login-button"]')).toBeVisible()
 })
 
-//Verify Description Matches Item in checkout screen
+//Verify Description Matches Item in checkout screens
 test("Item Matches Description", async ({page}) => {
     await page.locator('[data-test="add-to-cart-sauce-labs-fleece-jacket"]').click()
     await expect(page.locator('[data-test="inventory-list"]')).toContainText('It\'s not every day that you come across a midweight quarter-zip fleece jacket capable of handling everything from a relaxing day outdoors to a busy day at the office.')
     await page.locator('[data-test="shopping-cart-link"]').click()
     await expect(page.locator('[data-test="inventory-item-desc"]')).toContainText('It\'s not every day that you come across a midweight quarter-zip fleece jacket capable of handling everything from a relaxing day outdoors to a busy day at the office.')
+    await page.locator('[id="checkout"]').click()
+    await page.locator('[placeholder="First Name"]').fill("QA")
+    await page.locator('[placeholder="Last Name"]').fill("Guy")
+    await page.locator('[placeholder="Zip/Postal Code"]').fill("15211")
+    await page.locator('[id="continue"]').click()
+    await expect(page.locator('[data-test="inventory-item-desc"]')).toContainText('It\'s not every day that you come across a midweight quarter-zip fleece jacket capable of handling everything from a relaxing day outdoors to a busy day at the office.')
+    await page.locator('[id="react-burger-menu-btn"]').click()
+    await page.locator('[data-test="logout-sidebar-link"]').click()
+    await expect(page.locator('[data-test="login-button"]')).toBeVisible()
 })
 
 //Verify links take user back to the same description page on the various pages where link exists
@@ -112,4 +123,10 @@ test("Item Links", async ({page}) => {
     await page.locator('[placeholder="Zip/Postal Code"]').fill("15211")
     await page.locator('[id="continue"]').click()
     await expect(page.url()).toBe("https://www.saucedemo.com/checkout-step-two.html")
+    await expect( page.locator('[data-test="item-4-title-link"]')).toBeVisible()
+    await page.locator('[data-test="item-4-title-link"]').click()
+    await expect(page.url()).toBe("https://www.saucedemo.com/inventory-item.html?id=4")
+    await page.locator('[id="react-burger-menu-btn"]').click()
+    await page.locator('[data-test="logout-sidebar-link"]').click()
+    await expect(page.locator('[data-test="login-button"]')).toBeVisible()
 })

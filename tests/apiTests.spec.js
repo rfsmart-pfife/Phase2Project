@@ -9,13 +9,19 @@ const siteURL = "https://jsonplaceholder.typicode.com"
 test('API GET Request', async ({request}) => {
     const response = await request.get(`${siteURL}/posts/1`)
     expect(response.status()).toBe(200)
+    const firstPost = await response.json()
+    expect(firstPost.id).toBe(1)
+    expect(firstPost.userId).toBe(1)
+    expect(firstPost.title).toBe("sunt aut facere repellat provident occaecati excepturi optio reprehenderit")
+    expect(firstPost.body).toBe("quia et suscipit\nsuscipit recusandae consequuntur expedita et cum\nreprehenderit molestiae ut ut quas totam\nnostrum rerum est autem sunt rem eveniet architecto")
 })
 
 //POST test, add another blob of data to posts at the site
 test('API POST Request', async ({request}) => {
     const response = await request.post(`${siteURL}/posts`, {
         data : {
-            userId: 12,
+            userId: 10,
+            id: 101,
             title: 'Test Book',
             body: "This my POST test"
         }
@@ -23,7 +29,8 @@ test('API POST Request', async ({request}) => {
     const postResponse = await response.json()
     expect(response.ok())
     expect(postResponse.body).toBe("This my POST test")
-    expect(postResponse.userId).toBe(12)
+    expect(postResponse.userId).toBe(10)
+    expect(postResponse.id).toBe(101)
     expect(postResponse.title).toBe("Test Book")
 })
 
